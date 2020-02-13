@@ -53,7 +53,7 @@ func main() {
 	}
 	log.Println("db initialised")
 
-	fmt.Fprintln( common.Outstream, welcomeTitle)
+	fmt.Println( welcomeTitle)
 	log.Println("start operations loop")
 	operationsLoop(db, managersCommands)
 	log.Println("finish operations loop")
@@ -62,7 +62,7 @@ func main() {
 
 func operationsLoop(db *sql.DB, commands string) {
 	for {
-		fmt.Fprint( common.Outstream, commands)
+		fmt.Print( commands)
 		cmd := common.GetCommand()
 		log.Println("start of operation selection")
 		common.ClearConsole()
@@ -105,7 +105,7 @@ func operationsLoop(db *sql.DB, commands string) {
 }
 
 func searchClientOperations(db *sql.DB) bool {
-	fmt.Fprint( common.Outstream, searchClientCommands)
+	fmt.Print( searchClientCommands)
 	cmd := common.GetCommand()
 	common.ClearConsole()
 	switch cmd {
@@ -130,7 +130,7 @@ func searchClientBy(searchType string, db *sql.DB) {
 	var err error
 	if searchType == byName {
 		log.Println("asking to enter client name")
-		fmt.Fprint( common.Outstream, "Введите имя пользователя: ")
+		fmt.Print( "Введите имя пользователя: ")
 		name := common.GetStringInput()
 		log.Println("client name entered")
 
@@ -138,12 +138,12 @@ func searchClientBy(searchType string, db *sql.DB) {
 		clients, err = core.SearchClientByName(name, db)
 		if err != nil {
 			log.Printf("unable to search client: %v", err)
-			fmt.Fprintln( common.Outstream, "Поиск не удался")
+			fmt.Println( "Поиск не удался")
 			return
 		}
 	} else if searchType == byPhoneNumber {
 		log.Println("asking to enter clients' phone number")
-		fmt.Fprint( common.Outstream, "Введите номер телефона пользователя: ")
+		fmt.Print( "Введите номер телефона пользователя: ")
 		phoneNumber := common.GetIntegerInput()
 		log.Println("clients' phone number entered")
 
@@ -151,30 +151,30 @@ func searchClientBy(searchType string, db *sql.DB) {
 		clients, err = core.SearchClientByPhoneNumber(phoneNumber, db)
 		if err != nil {
 			log.Printf("unable to search client: %v", err)
-			fmt.Fprintln( common.Outstream, "Поиск не удался")
+			fmt.Println( "Поиск не удался")
 			return
 		}
 	}
 	log.Println("search completed")
 	if clients == nil {
 		log.Println("nothing was found")
-		fmt.Fprintln( common.Outstream, "Ничего не найдено")
+		fmt.Println( "Ничего не найдено")
 		return
 	}
 
 	for indx, client := range clients {
-		fmt.Fprintln( common.Outstream, indx+1, ") ", client.Name, client.PhoneNumber, client.Status)
+		fmt.Println( indx+1, ") ", client.Name, client.PhoneNumber, client.Status)
 	}
 }
 
 func changeClientStatus(db *sql.DB) {
 	log.Println("asking to enter client phone number")
-	fmt.Fprint( common.Outstream, "Введите номер телефона пользователя: ")
+	fmt.Print( "Введите номер телефона пользователя: ")
 	phoneNumber := common.GetIntegerInput()
 	log.Println("clients' phone number entered")
 
 	log.Println("asking to set status to client")
-	fmt.Fprint( common.Outstream, "Выберите статус пользователю (locked/active): ")
+	fmt.Print( "Выберите статус пользователю (locked/active): ")
 	status := common.GetCommand()
 	status = strings.ToLower(status)
 
@@ -185,18 +185,18 @@ func changeClientStatus(db *sql.DB) {
 		if err != nil {
 			if errors.Is(err, core.ErrPhoneNumberNotExist) {
 				log.Println("phone number does not exist")
-				fmt.Fprintln( common.Outstream, "Номер телефона не существует!")
+				fmt.Println( "Номер телефона не существует!")
 			}
 			log.Println("unable to change status")
-			fmt.Fprintln( common.Outstream, "Не удалось изменить статус.")
+			fmt.Println( "Не удалось изменить статус.")
 			return
 		}
-		fmt.Fprintln( common.Outstream, "Статус изменён")
+		fmt.Println( "Статус изменён")
 		return
 	}
 
 	log.Println("invalid status")
-	fmt.Fprintln( common.Outstream, "Неверный статус")
+	fmt.Println( "Неверный статус")
 }
 
 func printListOfClients(db *sql.DB) {
@@ -212,22 +212,22 @@ func printListOfClients(db *sql.DB) {
 		clients, err := core.GetListOfClientsFormatted(10, offset, db)
 		if err != nil {
 			log.Printf("unable to get list of clients: %v", err)
-			fmt.Fprintln( common.Outstream, "Не удалось получить список пользователей!")
+			fmt.Println( "Не удалось получить список пользователей!")
 			return
 		}
 		log.Println("list of clients received")
 		if clients == nil {
 			log.Println("list of clients is empty")
-			fmt.Fprintln( common.Outstream, "Пусто")
+			fmt.Println( "Пусто")
 			return
 		}
 
 		for indx, client := range clients {
-			fmt.Fprintln( common.Outstream, indx+1, ") ", client.Name, client.Login, client.PhoneNumber, client.Status)
+			fmt.Println( indx+1, ") ", client.Name, client.Login, client.PhoneNumber, client.Status)
 		}
 
-		fmt.Fprintln( common.Outstream, )
-		fmt.Fprint( common.Outstream, pagingOperations)
+		fmt.Println( )
+		fmt.Print( pagingOperations)
 		cmd := common.GetCommand()
 		common.ClearConsole()
 		switch cmd {
@@ -250,8 +250,8 @@ func printListOfClients(db *sql.DB) {
 }
 
 func importOperations(db *sql.DB, commands string) {
-	fmt.Fprintln( common.Outstream, importTitle)
-	fmt.Fprint( common.Outstream, commands)
+	fmt.Println( importTitle)
+	fmt.Print( commands)
 	cmd := common.GetCommand()
 	common.ClearConsole()
 	switch cmd {
@@ -267,7 +267,7 @@ func importOperations(db *sql.DB, commands string) {
 			return
 		}
 		log.Println("list of clients imported to db")
-		fmt.Fprintln( common.Outstream, "Список пользователей импортирован!")
+		fmt.Println( "Список пользователей импортирован!")
 	case "2":
 		log.Println("import list of accounts with client ids selected")
 		var accountWithClientIds []core.AccountWithClientId
@@ -280,7 +280,7 @@ func importOperations(db *sql.DB, commands string) {
 			return
 		}
 		log.Println("list of accountWithClientIds imported to db")
-		fmt.Fprintln( common.Outstream, "Список аккаунтов с пользователями импортирован!")
+		fmt.Println( "Список аккаунтов с пользователями импортирован!")
 	case "3":
 		log.Println("import list of ATMs selected")
 		var atms []core.ATM
@@ -293,7 +293,7 @@ func importOperations(db *sql.DB, commands string) {
 			return
 		}
 		log.Println("list of atms imported to db")
-		fmt.Fprintln( common.Outstream, "Список банкоматов импортирован!")
+		fmt.Println( "Список банкоматов импортирован!")
 	case "q":
 		log.Println("exit operation selected")
 		return
@@ -304,9 +304,9 @@ func importOperations(db *sql.DB, commands string) {
 }
 
 func unmarshaler(importTo interface{}) {
-	fmt.Fprintln( common.Outstream, importTitle)
+	fmt.Println( importTitle)
 	log.Println("asking for full file path")
-	fmt.Fprint( common.Outstream, "Введите полный путь к файлу: ")
+	fmt.Print( "Введите полный путь к файлу: ")
 	fullPath := common.GetStringInput()
 	log.Println("full file path entered")
 
@@ -327,7 +327,7 @@ func unmarshaler(importTo interface{}) {
 		err = xml.Unmarshal(file, &importTo)
 	} else {
 		log.Println("invalid file format")
-		fmt.Fprintln( common.Outstream, "Неверный формат файла!")
+		fmt.Println( "Неверный формат файла!")
 		return
 	}
 
@@ -341,8 +341,8 @@ func unmarshaler(importTo interface{}) {
 
 func exportOperationsLoop(db *sql.DB, commands string) {
 	for {
-		fmt.Fprintln( common.Outstream, exportTitle)
-		fmt.Fprint( common.Outstream, commands)
+		fmt.Println( exportTitle)
+		fmt.Print( commands)
 		cmd := common.GetCommand()
 		common.ClearConsole()
 		switch cmd {
@@ -353,13 +353,13 @@ func exportOperationsLoop(db *sql.DB, commands string) {
 			clients, err := core.GetListOfClients(db)
 			if err != nil {
 				log.Printf("unable to get list of clients: %v", err)
-				fmt.Fprintln( common.Outstream, "Не удалось получить список пользователей")
+				fmt.Println( "Не удалось получить список пользователей")
 				return
 			}
 			log.Println("list of clients received")
 			if clients == nil {
 				log.Println("list of clients is empty. No need for export.")
-				fmt.Fprintln( common.Outstream, "Список пользователей пуст. Нечего экспортировать!")
+				fmt.Println( "Список пользователей пуст. Нечего экспортировать!")
 				return
 			}
 			fileFormatOperations(fileFormats, core.Clients, clients)
@@ -370,13 +370,13 @@ func exportOperationsLoop(db *sql.DB, commands string) {
 			accountsWithClientIds, err := core.GetListOfAccountsWithClients(db)
 			if err != nil {
 				log.Printf("unable to get list of accounts with client ids: %v", err)
-				fmt.Fprintln( common.Outstream, "Не удалось получить список аккаунтов с пользователями")
+				fmt.Println( "Не удалось получить список аккаунтов с пользователями")
 				return
 			}
 			log.Println("list of accounts with client ids received")
 			if accountsWithClientIds == nil {
 				log.Println("list of accounts with client ids is empty. No need for export.")
-				fmt.Fprintln( common.Outstream, "Список аккаунтов с пользователями пуст. Нечего экспортировать!")
+				fmt.Println( "Список аккаунтов с пользователями пуст. Нечего экспортировать!")
 				return
 			}
 			fileFormatOperations(fileFormats, core.Accounts, accountsWithClientIds)
@@ -387,13 +387,13 @@ func exportOperationsLoop(db *sql.DB, commands string) {
 			listOfATMs, err := core.GetListOfATMs(db)
 			if err != nil {
 				log.Printf("unable to get list of ATMs: %v", err)
-				fmt.Fprintln( common.Outstream, "Не удалось получить список банкоматов")
+				fmt.Println( "Не удалось получить список банкоматов")
 				return
 			}
 			log.Println("list of ATMs received")
 			if listOfATMs == nil {
 				log.Println("list of ATMs is empty. No need for export.")
-				fmt.Fprintln( common.Outstream, "Список банкоматов пуст. Нечего экспортировать!")
+				fmt.Println( "Список банкоматов пуст. Нечего экспортировать!")
 				return
 			}
 			fileFormatOperations(fileFormats, core.ATMs, listOfATMs)
@@ -408,8 +408,8 @@ func exportOperationsLoop(db *sql.DB, commands string) {
 }
 
 func fileFormatOperations(formats string, title string, toExport interface{}) {
-	fmt.Fprintln( common.Outstream, formatsTitle)
-	fmt.Fprint( common.Outstream, formats)
+	fmt.Println( formatsTitle)
+	fmt.Print( formats)
 	cmd := common.GetCommand()
 	common.ClearConsole()
 	switch cmd {
@@ -437,7 +437,7 @@ func exportTo(format string, title string, export interface{}) {
 	case xmlFormat:
 		marshal, err = xml.Marshal(export)
 	default:
-		fmt.Fprintln( common.Outstream, "Неверный формат.")
+		fmt.Println( "Неверный формат.")
 		return
 	}
 	if err != nil {
@@ -446,18 +446,18 @@ func exportTo(format string, title string, export interface{}) {
 	log.Printf("exporting clients to \"%s\" format", format)
 	err = ioutil.WriteFile(fileName, marshal, 0666)
 	log.Println("file exported")
-	fmt.Fprintln( common.Outstream, "Файл экспортирован.")
+	fmt.Println( "Файл экспортирован.")
 }
 
 func addAtmToDb(db *sql.DB) {
-	fmt.Fprintln( common.Outstream, addingAtmTitle)
+	fmt.Println( addingAtmTitle)
 	log.Println("asking to enter byName of ATM")
-	fmt.Fprint( common.Outstream, "Введите название банкомата: ")
+	fmt.Print( "Введите название банкомата: ")
 	nameOfAtm := common.GetStringInput()
 	log.Println("byName of ATM entered")
 
 	log.Println("asking to enter location of ATM")
-	fmt.Fprint( common.Outstream, "Введите расположение банкомата: ")
+	fmt.Print( "Введите расположение банкомата: ")
 	locationOfAtm := common.GetStringInput()
 	log.Println("location of ATM entered")
 
@@ -466,7 +466,7 @@ func addAtmToDb(db *sql.DB) {
 	if err != nil {
 		log.Printf("unable to add ATM to db: %v", err)
 		common.ClearConsole()
-		fmt.Fprintln( common.Outstream, "Не удалось добавить банкомат.")
+		fmt.Println( "Не удалось добавить банкомат.")
 		if errors.Is(err, core.ErrATMExist) {
 			fmt.Printf("Банкомат в \"%s\"-е уже еcть\n", locationOfAtm)
 		}
@@ -478,9 +478,9 @@ func addAtmToDb(db *sql.DB) {
 }
 
 func addServiceToDb(db *sql.DB) {
-	fmt.Fprintln( common.Outstream, addingServiceTitle)
+	fmt.Println( addingServiceTitle)
 	log.Println("asking to enter byName of service")
-	fmt.Fprint( common.Outstream, "Введите название услуги: ")
+	fmt.Print( "Введите название услуги: ")
 	nameOfService := common.GetStringInput()
 	log.Println("byName of service entered")
 	log.Println("start adding service to db")
@@ -488,7 +488,7 @@ func addServiceToDb(db *sql.DB) {
 	if err != nil {
 		log.Printf("unable to add service to db: %v", err)
 		common.ClearConsole()
-		fmt.Fprintln( common.Outstream, "Не удалось добавить новую услугу")
+		fmt.Println( "Не удалось добавить новую услугу")
 		if errors.Is(err, core.ErrServiceExist) {
 			fmt.Printf("Услуга \"%s\" существует\n", nameOfService)
 		}
@@ -500,14 +500,14 @@ func addServiceToDb(db *sql.DB) {
 }
 
 func addAccountToClient(db *sql.DB) {
-	fmt.Fprintln( common.Outstream, addingAccountToClientTitle)
+	fmt.Println( addingAccountToClientTitle)
 	log.Println("asking to enter phone number")
-	fmt.Fprint( common.Outstream, "Введите номер телефона: ")
+	fmt.Print( "Введите номер телефона: ")
 	phoneNumber := common.GetIntegerInput()
 	log.Println("phone number entered")
 
 	log.Println("asking to enter cash amount to add to account")
-	fmt.Fprint( common.Outstream, "Введите сумму в рублях: ")
+	fmt.Print( "Введите сумму в рублях: ")
 	balance := common.GetIntegerInput()
 	log.Println("cash amount entered")
 
@@ -525,23 +525,23 @@ func addAccountToClient(db *sql.DB) {
 }
 
 func addClientToDb(db *sql.DB) {
-	fmt.Fprintln( common.Outstream, addingClientTitle)
-	fmt.Fprint( common.Outstream, "Введите имя: ")
+	fmt.Println( addingClientTitle)
+	fmt.Print( "Введите имя: ")
 	log.Println("asking for byName")
 	name := common.GetStringInput()
 	log.Println("byName entered")
 
-	fmt.Fprint( common.Outstream, "Введите номер телефона: ")
+	fmt.Print( "Введите номер телефона: ")
 	log.Println("asking for phone number")
 	phoneNumber := common.GetIntegerInput()
 	log.Println("phone number entered")
 
-	fmt.Fprint( common.Outstream, "Придумайте логин: ")
+	fmt.Print( "Придумайте логин: ")
 	log.Println("asking to create login")
 	login := common.GetStringInput()
 	log.Println("login created")
 
-	fmt.Fprint( common.Outstream, "Придумайте надёжный пароль: ")
+	fmt.Print( "Придумайте надёжный пароль: ")
 	log.Println("asking to create password")
 	password := common.GetStringInput()
 	log.Println("password entered")
@@ -554,12 +554,12 @@ func addClientToDb(db *sql.DB) {
 	if err != nil {
 		log.Printf("unable to add client: %v", err)
 		common.ClearConsole()
-		fmt.Fprintln( common.Outstream, "Не удалось добавить нового пользователя")
+		fmt.Println( "Не удалось добавить нового пользователя")
 		if errors.Is(err, core.ErrLoginExist) {
-			fmt.Fprintln( common.Outstream, "Пользователь с таким логином существует.")
+			fmt.Println( "Пользователь с таким логином существует.")
 		}
 		if errors.Is(err, core.ErrPhoneNumberExist) {
-			fmt.Fprintln( common.Outstream, "Пользователь с таким номером существует")
+			fmt.Println( "Пользователь с таким номером существует")
 		}
 		return
 	}

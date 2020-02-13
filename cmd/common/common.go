@@ -14,12 +14,9 @@ func ClearConsole() {
 	_ = cmd.Run()
 }
 
-var Instream *os.File = os.Stdin
-var Outstream *os.File = os.Stdout
-
 func GetCommand() string {
 	var cmd string
-	_, err := fmt.Fscan(Instream, &cmd)
+	_, err := fmt.Scan(&cmd)
 	if err != nil {
 		log.Fatalf("can't read input: %v", err)
 	}
@@ -28,7 +25,7 @@ func GetCommand() string {
 
 func GetIntegerInput() int64 {
 	var input int64
-	_, err := fmt.Scan(Instream, &input)
+	_, err := fmt.Scan(&input)
 	if err != nil {
 		log.Fatalf("can't read input: %v", err)
 	}
@@ -37,7 +34,7 @@ func GetIntegerInput() int64 {
 
 func GetStringInput() string {
 	var input string
-	_, err := fmt.Scan(Instream, &input)
+	_, err := fmt.Scan(&input)
 	if err != nil {
 		log.Fatalf("can't read input: %v", err)
 	}
